@@ -224,10 +224,9 @@ def action_bar(current_year):
     st.markdown("<div class='actionbar'>"+"".join(items)+"</div>",unsafe_allow_html=True)
 
 def activity_table_html(name,activity,unavailable=False):
-    profits=[standalone_profit(name,i) for i in range(4)];total=sum(profits)
     pct=lambda x:f"{x:.0%}"
     cls="activity unavailable" if unavailable else "activity"
-    return f"""<div class='{cls}'><div class='ico'>{activity['icon']}</div><h3>{name}</h3><table class='effect-table'><tr><th>Impact</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th></tr><tr><td>Productivity</td>{''.join(f'<td>{v:g}</td>' for v in activity['productivity'])}</tr><tr><td>Quality</td>{''.join(f'<td>{pct(v)}</td>' for v in activity['quality'])}</tr><tr><td>Cost</td>{''.join(f'<td>{v:g}</td>' for v in activity['manufacturing_cost'])}</tr><tr><td>Fixed Cost</td><td>{activity['fixed_cost']:g}</td><td>-</td><td>-</td><td>-</td></tr><tr class='profit-row'><td>Profit</td>{''.join(f'<td>{v:,.1f}</td>' for v in profits)}</tr></table><div class='total-profit'>Overall Profit if selected in Year 1: {total:,.1f}</div></div>"""
+    return f"""<div class='{cls}'><div class='ico'>{activity['icon']}</div><h3>{name}</h3><table class='effect-table'><tr><th>Impact</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th></tr><tr><td>Productivity</td>{''.join(f'<td>{v:g}</td>' for v in activity['productivity'])}</tr><tr><td>Quality</td>{''.join(f'<td>{pct(v)}</td>' for v in activity['quality'])}</tr><tr><td>Cost</td>{''.join(f'<td>{v:g}</td>' for v in activity['manufacturing_cost'])}</tr><tr><td>Fixed Cost</td><td>{activity['fixed_cost']:g}</td><td>-</td><td>-</td><td>-</td></tr></table></div>"""
 
 def trend(history):
     frame=pd.DataFrame(history);x=[f"Year {int(y)}" for y in frame["year"]];fig=go.Figure();fig.add_bar(x=x,y=frame["annual_profit"],name="Annual Profit",marker_color="#15803d");fig.add_scatter(x=x,y=frame["landed_cost"],name="Landed Cost",yaxis="y2",mode="lines+markers",line=dict(color="#f59e0b"));fig.update_layout(title="Annual Profit and Landed Cost",yaxis_title="Annual Profit",yaxis2=dict(title="Landed Cost",overlaying="y",side="right"));st.plotly_chart(fig,use_container_width=True)
